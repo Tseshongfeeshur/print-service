@@ -10,7 +10,8 @@
                 if (data.status === 'connected') {
                     const printerNames = data.details.map(printer => printer.name).join("、");
                     const successSnackbar = sober.Snackbar.builder({
-                        text: `打印机 ${printerNames} 已就绪。😋`
+                        text: `打印机 ${printerNames} 已就绪。😋`,
+                        duration: 1000
                     });
                     errorStatuIcon.style.display = 'none';
                     connectedStatuIcon.style.display = 'inline-block';
@@ -48,4 +49,5 @@
     const iconButton = document.getElementById('head-icon-button');
     iconButton.addEventListener('click', checkPrinter);
     const actionButton = document.getElementById('button-action');
+    actionButton.addEventListener('click', () => { goto('print'); });
 })();

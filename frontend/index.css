@@ -1,0 +1,53 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+page#app {
+    height: 100%;
+    width: 100%;
+}
+
+div#drawer-content {
+    widsth: 100%;
+}
+
+s-menu#app-menu {
+    max-width: 100%;
+}
+
+div#big-label {
+    height: 8em;
+}
+
+s-icon#big-label-icon {
+    width: 5em;
+    height: 5em;
+    color: var(--s-color-outline-variant);
+}
+
+s-menu-item {
+    margin: 0 .5em;
+}
+
+s-menu-item::part(container) {
+    height: 3.5em;
+    border-radius: 3.5em;
+}
+
+s-menu-item::part(text) {
+    font-weight: 500;
+    margin-left: .6em;
+}
+
+s-scroll-view#container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div#app-title {
+    font-size: 1.2em;
+}

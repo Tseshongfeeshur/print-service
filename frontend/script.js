@@ -27,35 +27,56 @@ async function goto(page) {
     // 虚化容器
     container.style.opacity = '0.3';
     // 获取子结构
-    async function fetchResource(url) {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            return await response.text();
-        } catch (error) {
-            console.warn(`加载资源失败：${url} - ${error}`);
-            return null; // 返回 null 表示加载失败
+    async function fetchResource(url, retries = 3, delay = 100) {
+        for (let attempt = 1; attempt <= retries; attempt++) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.text();
+            } catch (error) {
+                if (attempt === retries) {
+                    console.warn(`加载资源失败（${attempt}/${retries}）：${url} - ${error}`);
+                    return null; // 所有重试失败后返回 null
+                }
+                // 在重试之间添加延迟
+                await new Promise(resolve => setTimeout(resolve, delay));
+                console.log(`重试加载（${attempt}/${retries}）：${url}`);
+            }
         }
     }
-    const subHtml = await fetchResource(`./${page}/index.html`);
-    const subCss = await fetchResource(`./${page}/style.css`);
-    const subJs = await fetchResource(`./${page}/script.js`);
-    // 填充子结构到容器，添加样式，运行脚本
-    container.innerHTML = '';
-    container.insertAdjacentHTML('beforeend', subHtml);
-    if (subCss) {
-        const oldStyle = document.getElementById('spa-style');
-        if (oldStyle) oldStyle.remove();
-        const style = document.createElement('style');
-        style.id = 'spa-style'
-        style.textContent = subCss;
-        container.appendChild(style);
-    }
-    if (subJs) {
-        const script = document.createElement('script');
-        script.textContent = subJs;
-        script.async = true;
-        document.head.appendChild(script);
+    try {
+        const [subHtml, subCss, subJs] = await Promise.all([
+            fetchResource(`./${page}/index.html`),
+            fetchResource(`./${page}/style.css`),
+            fetchResource(`./${page}/script.js`)
+        ]);
+        
+        // 清空容器并填充新内容
+        container.innerHTML = '';
+        container.insertAdjacentHTML('beforeend', subHtml || '');
+        
+        // 处理 CSS
+        if (subCss) {
+            const oldStyle = document.getElementById('spa-style');
+            if (oldStyle) oldStyle.remove();
+            
+            const style = document.createElement('style');
+            style.id = 'spa-style';
+            style.textContent = subCss;
+            container.appendChild(style);
+        }
+        
+        // 处理 JS
+        if (subJs) {
+            const script = document.createElement('script');
+            script.textContent = subJs;
+            script.async = true;
+            document.head.appendChild(script);
+        }
+    } catch (error) {
+        console.error('页面加载出错:', error);
     }
     // 滚动到顶部
     container.scrollTop = 0;
@@ -68,13 +89,12 @@ async function goto(page) {
     menuItems.forEach(function(item) {
         if (item.id == page) {
             item.setAttribute('checked', 'true');
-            currentTitle = item.innerText;
+            currentTitle = item.textContent.trim();
         } else {
             item.removeAttribute('checked');
         }
-        drawer.close();
-        appTitle.innerText = currentTitle;
-        document.title = `${currentTitle} | 局域网打印`;
     });
-    console.log('finished');
+    drawer.close();
+    appTitle.innerText = currentTitle;
+    document.title = `${currentTitle} | 局域网打印`;
 }

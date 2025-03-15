@@ -9,8 +9,7 @@
             .then(data => {
                 if (data.status === 'connected') {
                     const successSnackbar = sober.Snackbar.builder({
-                        text: '打印机已就绪。😋',
-                        type: 'success'
+                        text: '打印机已就绪。😋'
                     });
                     errorStatuIcon.style.display = 'none';
                     connectedStatuIcon.style.display = 'inline-block';
@@ -38,6 +37,7 @@
                     text: `检查失败。😢（${error.message}）`,
                     type: 'error'
                 });
+                console.log(error);
                 errorStatuIcon.style.display = 'inline-block';
                 connectedStatuIcon.style.display = 'none';
                 errorSnackbar.show();

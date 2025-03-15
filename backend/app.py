@@ -1,7 +1,9 @@
 from flask import Flask, jsonify
+from flask_cors import CORS  # 导入 CORS
 import subprocess
 
 app = Flask(__name__)
+CORS(app)  # 启用 CORS 支持
 
 @app.route('/check', methods=['GET'])
 def check_printer_status():

@@ -8,8 +8,7 @@
                 // 如果请求成功，端口连通
                 localStorage.setItem('serverIp', ip);
                 const successSnackbar = sober.Snackbar.builder({
-                    text: '目标地址连通，已保存。😋',
-                    type: 'success'
+                    text: '目标地址连通，已保存。😋'
                 });
                 successSnackbar.show();
             })

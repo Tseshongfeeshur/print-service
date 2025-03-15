@@ -1,9 +1,9 @@
 from flask import Flask, jsonify
-from flask_cors import CORS  # 导入 CORS
-import cups  # 导入 pycups 进行打印机管理
+from flask_cors import CORS
+import cups
 
 app = Flask(__name__)
-CORS(app)  # 启用 CORS 支持
+CORS(app)
 
 @app.route('/check', methods=['GET'])
 def check_printer_status():
@@ -14,19 +14,21 @@ def check_printer_status():
         # 获取所有打印机信息
         printers = conn.getPrinters()
 
-        if not printers:
-            return jsonify({"status": "not found"})
-
-        # 解析打印机状态
-        printer_list = []
-        for name, info in printers.items():
-            printer_list.append({
+        # 过滤掉状态为 "stopped" (5) 的打印机
+        active_printers = [
+            {
                 "name": name,
-                "status": info.get("printer-state-message", "Unknown"),  # 获取状态信息
-                "is_default": info.get("printer-is-default", False),  # 是否为默认打印机
-            })
+                "status": info.get("printer-state-message", "Unknown"),
+                "is_default": info.get("printer-is-default", False)
+            }
+            for name, info in printers.items()
+            if info.get("printer-state") in [3, 4]  # 仅保留空闲(3) 和打印中(4) 的设备
+        ]
 
-        return jsonify({"status": "connected", "details": printer_list})
+        if not active_printers:
+            return jsonify({"status": "not found"})  # 没有可用的打印机
+
+        return jsonify({"status": "connected", "details": active_printers})
 
     except cups.IPPError as e:
         return jsonify({"status": "error", "message": f"CUPS 连接错误: {e}"})

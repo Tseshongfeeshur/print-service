@@ -1,15 +1,14 @@
 (function() {
     function checkPrinter() {
         const serverIp = localStorage.getItem('serverIp');
-        const printerName = localStorage.getItem('printerName');
         const connectedStatuIcon = document.getElementById('connected-statu');
         const errorStatuIcon = document.getElementById('error-statu');
-        fetch(`http://${serverIp}:632/check?printer=${printerName}`)
+        fetch(`http://${serverIp}:632/check`)
             // 解析为 JSON
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'connected') {
-                    const printerNames = responseJson.details.map(printer => printer.name).join("、");
+                    const printerNames = data.details.map(printer => printer.name).join("、");
                     const successSnackbar = sober.Snackbar.builder({
                         text: `打印机 ${printerNames} 已就绪。😋`
                     });

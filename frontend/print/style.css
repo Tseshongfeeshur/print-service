@@ -3,7 +3,7 @@ s-scroll-view#container {
 }
 
 div#upload-button-container {
-    margin: 2em 0;
+    margin: 2em 0 1em 0;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -12,5 +12,24 @@ div#upload-button-container {
 }
 
 input#file-input {
+    display: none;
+}
+
+s-card#result-card {
+    margin: 0 0 1em 0;
+    display: block;
+    max-width: none;
+    box-shadow: transparent 0 0 0 0;
+}
+
+span#result-statu {
+    margin: 1em;
+    display: block;
+}
+
+s-table#result-table {
+    overflow: auto;
+    margin: 1em;
+    min-width: calc(100% - 1em * 2);
     display: none;
 }

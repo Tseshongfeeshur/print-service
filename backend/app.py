@@ -88,5 +88,35 @@ def upload_files():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+@app.route('/subfolders', methods=['GET'])
+def get_subfolders():
+    try:
+        # 检查基础目录是否存在
+        if not os.path.exists(BASE_UPLOAD_FOLDER):
+            return jsonify({
+                "status": "success",
+                "subfolders": [],
+                "message": "Base folder does not exist"
+            })
+
+        # 获取所有子文件夹
+        subfolders = [f for f in os.listdir(BASE_UPLOAD_FOLDER) 
+                     if os.path.isdir(os.path.join(BASE_UPLOAD_FOLDER, f))]
+        
+        # 按名称排序（可选）
+        subfolders.sort()
+
+        return jsonify({
+            "status": "success",
+            "subfolders": subfolders,
+            "count": len(subfolders)
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=632, debug=True)

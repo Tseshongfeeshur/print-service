@@ -14,7 +14,7 @@
             })
             .catch(error => {
                 // 如果请求失败，端口不通
-                ipInputElement.value = '';
+                ipInputElement.value = localStorage.getItem('serverIp');
                 const errorSnackbar = sober.Snackbar.builder({
                     text: '目标地址无法连通。😢',
                     type: 'error'

@@ -1,0 +1,16 @@
+s-scroll-view#container {
+    padding: 0 2em;
+}
+
+div#upload-button-container {
+    margin: 2em 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+input#file-input {
+    display: none;
+}

@@ -2,16 +2,14 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import cups
 import os
-import random
 from datetime import datetime
+import random
 
 app = Flask(__name__)
 CORS(app)
 
-# 设置上传目录
-UPLOAD_FOLDER = '/tmp/printer-service'
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+# 设置基础上传目录
+BASE_UPLOAD_FOLDER = '/tmp/printer-service'
 
 @app.route('/check', methods=['GET'])
 def check_printer_status():
@@ -53,32 +51,37 @@ def upload_files():
         files = request.files.getlist('files')  # 获取多个文件
         
         if not files or files[0].filename == '':
-            return jsonify({"status": "error", "message": "没有选择文件"}), 400
+            return jsonify({"status": "error", "messageshop": "没有选择文件"}), 400
+
+        # 生成子目录名：当前时间 + 4位随机数
+        current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
+        random_num = str(random.randint(1000, 9999))
+        subfolder_name = f"{current_time}--{random_num}"
+        upload_folder = os.path.join(BASE_UPLOAD_FOLDER, subfolder_name)
+
+        # 创建子目录（如果不存在）
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
 
         uploaded_files = []
         for file in files:
             if file and file.filename:
-                # 获取文件扩展名
-                file_ext = os.path.splitext(file.filename)[1]
+                # 使用原文件名
+                filename = file.filename
+                file_path = os.path.join(upload_folder, filename)
                 
-                # 生成新文件名：当前时间 + 5位随机数 + 原扩展名
-                current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
-                random_num = str(random.randint(10000, 99999))
-                new_filename = f"{current_time}--{random_num}{file_ext}"
-                
-                # 保存文件到指定目录
-                file_path = os.path.join(UPLOAD_FOLDER, new_filename)
+                # 保存文件
                 file.save(file_path)
                 
                 uploaded_files.append({
-                    "original_filename": file.filename,
-                    "new_filename": new_filename,
+                    "filename": filename,
                     "path": file_path
                 })
 
         return jsonify({
             "status": "success",
-            "message": f"成功上传 {len(uploaded_files)} 个文件",
+            "subfolder": subfolder_name,
+            "number": len(uploaded_files),
             "files": uploaded_files
         })
 

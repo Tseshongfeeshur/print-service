@@ -13,7 +13,6 @@
     fileInput.addEventListener('change', async (event) => {
         const files = event.target.files;
         if (files.length === 0) {
-            statusDiv.textContent = '未选择文件';
             return;
         }
         // 创建 FormData 对象
@@ -22,7 +21,7 @@
             formData.append('files', files[i]);
         }
         // 更新状态显示
-        statusDiv.textContent = '正在上传...';
+        statusDiv.textContent = '正在上传…';
         try {
             // 发送 POST 请求到 /upload 接口
             const response = await fetch(`http://${serverIp}:632/upload`, {
@@ -30,20 +29,28 @@
                 body: formData
             });
             // 解析响应
-            console.log(response)
             const result = await response.json();
             if (result.status === 'success') {
                 // 显示上传成功的文件信息
-                let message = `${result.message}\n`;
+                let message = `${result.subfolder}\n`;
                 result.files.forEach(file => {
-                    message += `原文件名: ${file.original_filename} -> 新文件名: ${file.new_filename}\n`;
+                    message += `${file.filename}\n`;
                 });
+                message += file.number;
                 statusDiv.textContent = message;
             } else {
-                statusDiv.textContent = `上传失败: ${result.message}`;
+                const errorSnackbar = sober.Snackbar.builder({
+                    text: `上传失败。😢（${result.message}）`,
+                    type: 'error'
+                });
+                errorSnackbar.show();
             }
         } catch (error) {
-            statusDiv.textContent = `上传出错: ${error.message}`;
+            const errorSnackbar = sober.Snackbar.builder({
+                text: `上传出错。😢（${error.message}）`,
+                type: 'error'
+            });
+            errorSnackbar.show();
         }
         // 重置文件输入
         fileInput.value = '';

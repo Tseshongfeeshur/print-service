@@ -42,12 +42,10 @@ s-menu-item::part(text) {
     margin-left: .6em;
 }
 
-s-scroll-view#container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 div#app-title {
     font-size: 1.2em;
+}
+
+strong {
+    color: var(--s-color-primary);
 }

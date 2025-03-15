@@ -1,0 +1,10 @@
+div#sub-container {
+    width: calc(100% - 2em * 2);
+    margin: 2em;
+    display: block;
+}
+
+s-text-field {
+    width: 100%;
+    margin-bottom: 1em;
+}

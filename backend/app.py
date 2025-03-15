@@ -11,7 +11,7 @@ def check_printer_status():
         # 执行 lpstat -p 获取打印机状态
         result = subprocess.run(["lpstat", "-p"], capture_output=True, text=True)
         output = result.stdout.strip()
-        
+        print(output)
         # 解析输出，检查打印机状态
         if "printer" in output:
             status_lines = output.split("\n")

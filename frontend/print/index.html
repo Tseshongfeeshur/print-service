@@ -1,27 +1,53 @@
-<div id="upload-button-container">
-    <s-button id="upload-button"> 上传文件 </s-button>
-    <s-button id="upload-button" type="filled-tonal"> 打印选项 </s-button>
-    <input type="file" id="file-input" multiple>
+<s-tab id="tab" mode="fixed">
+  <s-tab-item value="upload" selected="true">
+    <div slot="text">上传文件</div>
+  </s-tab-item>
+  <s-tab-item value="choose">
+    <div slot="text">选择文件</div>
+  </s-tab-item>
+  <s-tab-item value="config">
+    <div slot="text">打印选项</div>
+  </s-tab-item>
+</s-tab>
+<div id="sub-container">
+    <div id="upload">
+        <div id="upload-button-container">
+            <s-button id="upload-button"> 上传文件 </s-button>
+            <input type="file" id="file-input" multiple>
+        </div>
+        <s-card id="result-card" clickable="true">
+            <span id="result-statu">将在此处更新上传情况。</span>
+            <s-table id="result-table">
+                <s-tbody>
+                    <s-tr>
+                        <s-th>任务名称</s-th>
+                        <s-th id="result-name"></s-th>
+                    </s-tr>
+                    <s-tr>
+                        <s-th>文件名称</s-th>
+                        <s-th id="result-files"></s-th>
+                    </s-tr>
+                    <s-tr>
+                        <s-th>文件数量</s-th>
+                        <s-th id="result-number"></s-th>
+                    </s-tr>
+                </s-tbody>
+            </s-table>
+        </s-card>
+    </div>
+    <div id="choose">
+        <s-picker id="task-name" label="任务"></s-picker>
+        <s-scroll-view id="file-checkbox-container"></s-scroll-view>
+    </div>
+    <div id="config">
+        
+    </div>
 </div>
-<s-card id="result-card" clickable="true">
-    <span id="result-statu">将在此处更新上传情况。</span>
-    <s-table id="result-table">
-        <s-tbody>
-            <s-tr>
-                <s-th>任务名称</s-th>
-                <s-th id="result-name"></s-th>
-            </s-tr>
-            <s-tr>
-                <s-th>文件名称</s-th>
-                <s-th id="result-files"></s-th>
-            </s-tr>
-            <s-tr>
-                <s-th>文件数量</s-th>
-                <s-th id="result-number"></s-th>
-            </s-tr>
-        </s-tbody>
-    </s-table>
-</s-card>
-<s-divider></s-divider>
-<s-picker id="task-name" label="任务"></s-picker>
-<div id="file-checkbox-container"></div>
+<s-fab id="print-now">
+    <s-icon name="add" slot="start">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+            <path d="M640-640v-120H320v120h-80v-200h480v200h-80Zm-480 80h640-640Zm560 100q17 0 28.5-11.5T760-500q0-17-11.5-28.5T720-540q-17 0-28.5 11.5T680-500q0 17 11.5 28.5T720-460Zm-80 260v-160H320v160h320Zm80 80H240v-160H80v-240q0-51 35-85.5t85-34.5h560q51 0 85.5 34.5T880-520v240H720v160Zm80-240v-160q0-17-11.5-28.5T760-560H200q-17 0-28.5 11.5T160-520v160h80v-80h480v80h80Z"></path>
+        </svg>
+    </s-icon>
+    开始打印
+</s-fab>

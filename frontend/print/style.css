@@ -1,18 +1,13 @@
-s-scroll-view#container {
+div#sub-container {
     padding: 0 2em;
 }
 
 div#upload-button-container {
-    margin: 2em 0 1em 0;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
+    margin: 3em 0 2em 0;
 }
 
 div#upload-button-container > s-button {
-    width: 48%;
+    width: 100%;
 }
 
 input#file-input {
@@ -20,7 +15,6 @@ input#file-input {
 }
 
 s-card#result-card {
-    margin: 0 0 2em 0;
     display: block;
     max-width: none;
     box-shadow: transparent 0 0 0 0;
@@ -39,7 +33,29 @@ s-table#result-table {
 }
 
 s-picker#task-name {
-    margin: 1em 0 1em 0;
+    margin: 3em 0 1em 0;
     max-width: none;
     width: 100%;
+}
+
+div#file-checkbox-container {
+    overflow: hidden;
+}
+
+div#upload {
+    display: block;
+}
+
+div#choose {
+    display: none;
+}
+
+div#config {
+    display: none;
+}
+
+s-fab#print-now {
+    position: fixed;
+    bottom: 4em;
+    right: 2em;
 }

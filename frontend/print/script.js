@@ -44,6 +44,9 @@
                 });
                 resultFiles.innerHTML = fileNames
                 resultNumber.textContent = result.number;
+                getTasks();
+                const taskName = document.getElementById('task-name');
+                taskName.value = result.subfolder;
             } else {
                 const errorSnackbar = sober.Snackbar.builder({
                     text: `上传失败。😢`,
@@ -67,6 +70,33 @@
         // 重置文件输入
         fileInput.value = '';
     });
+    async function getTasks() {
+        const taskName = document.getElementById('task-name');
+        try {
+            const response = await fetch(`${serverIp}:632/subfolders`);
+            const data = await response.json();
+
+            // 检查响应状态并提取子文件夹列表
+            if (data.status === "success" && data.subfolders) {
+                data.subfolders.forEach(subfolder => {
+                    // 对每个子文件夹名称进行处理
+                    const newTask = document.createElement('s-picker-item');
+                    newTask.id = subfolder;
+                    newTask.textContent = subfolder;
+                    taskName.appendChild(newTask);
+                });
+            } else {
+                newTask.innerHTML = '';
+            }
+        } catch (error) {
+            const errorSnackbar = sober.Snackbar.builder({
+                text: `发生错误。😢（${error.message}）`,
+                type: 'error'
+            });
+            errorSnackbar.show();
+            newTask.innerHTML = '';
+        }
+    }
 })();
 
 // 待添加子文件夹读取/上传后自动设置文件夹

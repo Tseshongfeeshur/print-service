@@ -1,7 +1,5 @@
-div#sub-container {
-    width: calc(100% - 2em * 2);
-    margin: 2em;
-    display: block;
+s-scroll-view#container {
+    padding: 0 2em;
 }
 
 s-text-field {

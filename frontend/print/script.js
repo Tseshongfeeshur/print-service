@@ -81,7 +81,7 @@
                 data.subfolders.forEach(subfolder => {
                     // 对每个子文件夹名称进行处理
                     const newTask = document.createElement('s-picker-item');
-                    newTask.id = subfolder;
+                    newTask.value = subfolder;
                     newTask.textContent = subfolder;
                     taskName.appendChild(newTask);
                 });

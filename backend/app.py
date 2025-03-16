@@ -119,33 +119,33 @@ def get_subfolders():
         }), 500
 
 
-@app.route('/subfiles', methods=['GET'])
-def get_subfiles():
-    try:
-        # 获取请求参数 subfolder
-        subfolder = request.args.get('subfolder')
-        if not subfolder:
-            return jsonify({"status": "error", "message": "缺少 subfolder 参数"}), 400
+# @app.route('/subfiles', methods=['GET'])
+# def get_subfiles():
+#     try:
+#         # 获取请求参数 subfolder
+#         subfolder = request.args.get('subfolder')
+#         if not subfolder:
+#             return jsonify({"status": "error", "message": "缺少 subfolder 参数"}), 400
 
-        # 构造子目录路径
-        folder_path = os.path.join(BASE_UPLOAD_FOLDER, subfolder)
+#         # 构造子目录路径
+#         folder_path = os.path.join(BASE_UPLOAD_FOLDER, subfolder)
 
-        # 检查目录是否存在
-        if not os.path.exists(folder_path) or not os.path.isdir(folder_path):
-            return jsonify({"status": "error", "message": "子文件夹不存在"}), 404
+#         # 检查目录是否存在
+#         if not os.path.exists(folder_path) or not os.path.isdir(folder_path):
+#             return jsonify({"status": "error", "message": "子文件夹不存在"}), 404
 
-        # 获取该文件夹下的所有文件
-        files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+#         # 获取该文件夹下的所有文件
+#         files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
 
-        return jsonify({
-            "status": "success",
-            "subfolder": subfolder,
-            "files": files,
-            "count": len(files)
-        })
+#         return jsonify({
+#             "status": "success",
+#             "subfolder": subfolder,
+#             "files": files,
+#             "count": len(files)
+#         })
 
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+#     except Exception as e:
+#         return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=632, debug=True)

@@ -16,7 +16,7 @@ input#file-input {
 }
 
 s-card#result-card {
-    margin: 0 0 1em 0;
+    margin: 0 0 2em 0;
     display: block;
     max-width: none;
     box-shadow: transparent 0 0 0 0;
@@ -32,4 +32,9 @@ s-table#result-table {
     margin: 1em;
     min-width: calc(100% - 1em * 2);
     display: none;
+}
+
+s-picker#task-name {
+    max-width: none;
+    width: 100%;
 }

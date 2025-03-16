@@ -19,6 +19,8 @@ def check_printer_status():
         
         # 获取所有打印机信息
         printers = conn.getPrinters()
+        print("PRINTERS:")
+        print(printers)
 
         # 过滤掉状态为 "stopped" (5) 的打印机
         active_printers = [

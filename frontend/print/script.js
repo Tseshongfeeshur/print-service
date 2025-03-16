@@ -24,7 +24,10 @@
         const resultName = document.getElementById('result-name');
         const resultFiles = document.getElementById('result-files');
         const resultNumber = document.getElementById('result-number');
-        resultStatu.textContent = '正在上传…';
+        const uploadingSnackbar = sober.Snackbar.builder({
+            text: '正在上传…🧐'
+        });
+        uploadingSnackbar.show();
         try {
             // 发送 POST 请求到 /upload 接口
             const response = await fetch(`http://${serverIp}:632/upload`, {
@@ -47,6 +50,10 @@
                 getTasks();
                 const taskName = document.getElementById('task-name');
                 taskName.value = result.subfolder;
+                const successSnackbar = sober.Snackbar.builder({
+                    text: '上传成功。😋'
+                });
+                successSnackbar.show();
             } else {
                 const errorSnackbar = sober.Snackbar.builder({
                     text: `上传失败。😢`,
@@ -72,10 +79,10 @@
     });
     async function getTasks() {
         const taskName = document.getElementById('task-name');
+        taskName.innerHTML = '';
         try {
-            const response = await fetch(`${serverIp}:632/subfolders`);
+            const response = await fetch(`http://${serverIp}:632/subfolders`);
             const data = await response.json();
-
             // 检查响应状态并提取子文件夹列表
             if (data.status === "success" && data.subfolders) {
                 data.subfolders.forEach(subfolder => {
@@ -86,7 +93,7 @@
                     taskName.appendChild(newTask);
                 });
             } else {
-                newTask.innerHTML = '';
+                taskName.innerHTML = '';
             }
         } catch (error) {
             const errorSnackbar = sober.Snackbar.builder({
@@ -94,9 +101,34 @@
                 type: 'error'
             });
             errorSnackbar.show();
-            newTask.innerHTML = '';
+            taskName.innerHTML = '';
         }
     }
+    // 页面加载即获取最近任务列表
+    getTasks();
+    const taskName = document.getElementById('task-name');
+    taskName.addEventListener('change', ()=> {
+        const ul = document.getElementById('file-checkbox-container');
+        const response = await fetch(`http://${serverIp}:632/subfiles?subfolder=${taskName.value}`);
+        const data = await response.json();
+        if (data.status === "success") {
+            ul.innerHTML = '';
+            if (data.files.length != 0) {
+                data.files.forEach((file) => {
+                    const li = document.createElement('s-checkbox');
+                    li.textContent = file;
+                    ul.appendChild(li);
+                });
+            }
+        } else {
+            ul.innerHTML = '';
+            const errorSnackbar = sober.Snackbar.builder({
+                text: `出现错误。😢（${data.message}）`,
+                type: 'error'
+            });
+            errorSnackbar.show();
+        }
+    });
 })();
 
 // 待添加子文件夹读取/上传后自动设置文件夹

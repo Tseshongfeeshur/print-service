@@ -5,10 +5,14 @@ s-scroll-view#container {
 div#upload-button-container {
     margin: 2em 0 1em 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
+}
+
+div#upload-button-container > s-button {
+    width: 48%;
 }
 
 input#file-input {
@@ -35,6 +39,7 @@ s-table#result-table {
 }
 
 s-picker#task-name {
+    margin: 1em 0 1em 0;
     max-width: none;
     width: 100%;
 }

@@ -49,3 +49,7 @@ div#app-title {
 strong {
     color: var(--s-color-primary);
 }
+
+s-divider {
+    margin: 2em 0;
+}

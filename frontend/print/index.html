@@ -41,7 +41,75 @@
         <s-scroll-view id="file-checkbox-container"></s-scroll-view>
     </div>
     <div id="config">
-        <div id="printer-options"></div>
+        <div id="printer-options">
+            <s-picker id="PageSize" class="print-option-pickers" label="纸张尺寸">
+                <s-picker-item value="A4">A4</s-picker-item>
+                <s-picker-item value="Letter">Letter</s-picker-item>
+                <s-picker-item value="Legal">Legal</s-picker-item>
+                <s-picker-item value="A6">A6</s-picker-item>
+                <s-picker-item value="A5">A5</s-picker-item>
+                <s-picker-item value="B5">B5</s-picker-item>
+                <s-picker-item value="8.5x13in">8.5x13in</s-picker-item>
+                <s-picker-item value="216x340mm">216x340mm</s-picker-item>
+                <s-picker-item value="195x270mm">195x270mm</s-picker-item>
+                <s-picker-item value="184x260mm">184x260mm</s-picker-item>
+                <s-picker-item value="Postcard">Postcard</s-picker-item>
+                <s-picker-item value="4x6">4x6</s-picker-item>
+                <s-picker-item value="5x7">5x7</s-picker-item>
+                <s-picker-item value="B6">B6</s-picker-item>
+                <s-picker-item value="10x15">10x15</s-picker-item>
+                <s-picker-item value="Statement">Statement</s-picker-item>
+                <s-picker-item value="EnvMonarch">EnvMonarch</s-picker-item>
+                <s-picker-item value="EnvDL">EnvDL</s-picker-item>
+                <s-picker-item value="Env10">Env10</s-picker-item>
+                <s-picker-item value="EnvC5">EnvC5</s-picker-item>
+                <s-picker-item value="EnvISOB5">EnvISOB5</s-picker-item>
+                <s-picker-item value="EnvC6">EnvC6</s-picker-item>
+                <s-picker-item value="EnvChou3">EnvChou3</s-picker-item>
+                <s-picker-item value="DoublePostcardRotated">DoublePostcardRotated</s-picker-item>
+                <s-picker-item value="Executive">Executive</s-picker-item>
+                <s-picker-item value="Envroc16k">Envroc16k</s-picker-item>
+            </s-picker>
+            <s-picker id="MediaType" class="print-option-pickers" label="纸张类型">
+                <s-picker-item value="Auto">自动</s-picker-item>
+                <s-picker-item value="Plain">普通纸</s-picker-item>
+                <s-picker-item value="Letterhead">信纸</s-picker-item>
+                <s-picker-item value="Envelope">信封</s-picker-item>
+                <s-picker-item value="Labels">标签纸</s-picker-item>
+                <s-picker-item value="Bond">书写纸</s-picker-item>
+                <s-picker-item value="Colored">彩色纸</s-picker-item>
+                <s-picker-item value="Recycled">再生纸</s-picker-item>
+                <s-picker-item value="Transparency">透明胶片</s-picker-item>
+                <s-picker-item value="Preprinted">预印纸</s-picker-item>
+                <s-picker-item value="Prepunched">打孔纸</s-picker-item>
+                <s-picker-item value="HPEcoSMARTLite">环保纸</s-picker-item>
+                <s-picker-item value="MidWeight">中等厚度</s-picker-item>
+                <s-picker-item value="Light">轻质纸</s-picker-item>
+                <s-picker-item value="Heavy">厚纸</s-picker-item>
+                <s-picker-item value="ExtraHeavy">特厚纸</s-picker-item>
+                <s-picker-item value="Rough">粗糙纸</s-picker-item>
+                <s-picker-item value="Vellum">羊皮纸</s-picker-item>
+            </s-picker>
+            <s-picker id="InputSlot" class="print-option-pickers" label="进纸来源">
+                <s-picker-item value="tray1">纸盒 1</s-picker-item>
+                <s-picker-item value="Manual">手动进纸</s-picker-item>
+            </s-picker>
+            <s-picker id="EconoMode" class="print-option-pickers" label="省墨模式">
+                <s-picker-item value="false">关闭</s-picker-item>
+                <s-picker-item value="true">开启</s-picker-item>
+            </s-picker>
+            <s-picker id="ColorModel" class="print-option-pickers" label="颜色模式">
+                <s-picker-item value="Gray">灰度</s-picker-item>
+                <s-picker-item value="Mono">单色</s-picker-item>
+                <s-picker-item value="KGray">灰度增强</s-picker-item>
+            </s-picker>
+            <s-picker id="OutputMode" class="print-option-pickers" label="打印质量">
+                <s-picker-item value="Draft">草稿</s-picker-item>
+                <s-picker-item value="FastRes600">600 DPI</s-picker-item>
+                <s-picker-item value="FastRes1200">1200 DPI</s-picker-item>
+                <s-picker-item value="ImageREt2400">高质量</s-picker-item>
+            </s-picker>
+        </div>
     </div>
 </div>
 <s-fab id="print-now">

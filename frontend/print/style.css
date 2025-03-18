@@ -15,21 +15,17 @@ input#file-input {
 }
 
 s-card#result-card {
-    display: block;
+    display: none;
     max-width: none;
+    width: 100%;
     box-shadow: transparent 0 0 0 0;
-}
-
-span#result-statu {
-    margin: 1em;
-    display: block;
 }
 
 s-table#result-table {
     overflow: auto;
     margin: 1em;
     min-width: calc(100% - 1em * 2);
-    display: none;
+    display: block;
 }
 
 div#task-name-container {

@@ -32,14 +32,28 @@ s-table#result-table {
     display: none;
 }
 
-s-picker#task-name {
+div#task-name-container {
     margin: 3em 0 1em 0;
+    width: 100%;
+}
+s-picker#task-name{
     max-width: none;
     width: 100%;
 }
 
-div#file-checkbox-container {
-    overflow: hidden;
+s-scroll-view#file-checkbox-container {
+    margin: 1em 0 0 0;
+}
+
+div#printer-options {
+    margin: 3em 0 0 0;
+}
+
+s-picker.print-option-pickers {
+    max-width: none;
+    display: block;
+    width: 100%;
+    margin: 0 0 2em 0;
 }
 
 div#upload {

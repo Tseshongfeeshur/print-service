@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import cups
 import os
+import subprocess
 from datetime import datetime
 import random
 
@@ -150,4 +151,14 @@ def get_subfiles():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=632, debug=True)
+    # 启动 Flask 后端
+    flask_process = subprocess.Popen(["python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=632"])
+
+    # 启动前端 HTTP 服务器
+    frontend_process = subprocess.Popen(["python3", "-m", "http.server", "631", "--directory", "../frontend"])
+
+    try:
+        flask_process.wait()
+    except KeyboardInterrupt:
+        flask_process.terminate()
+        frontend_process.terminate()

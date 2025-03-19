@@ -150,15 +150,14 @@ def get_subfiles():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-if __name__ == '__main__':
-    # 启动 Flask 后端
-    flask_process = subprocess.Popen(["python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=632"])
 
+if __name__ == '__main__':
     # 启动前端 HTTP 服务器
     frontend_process = subprocess.Popen(["python3", "-m", "http.server", "633", "--directory", "../frontend"])
 
     try:
-        flask_process.wait()
-    except KeyboardInterrupt:
-        flask_process.terminate()
+        # 启动 Flask 后端
+        app.run(host='0.0.0.0', port=632, debug=True)
+    finally:
+        # 终止前端服务器
         frontend_process.terminate()

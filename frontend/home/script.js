@@ -3,7 +3,7 @@
         const serverIp = localStorage.getItem('serverIp');
         const connectedStatuIcon = document.getElementById('connected-statu');
         const errorStatuIcon = document.getElementById('error-statu');
-        fetch(`http://${serverIp}:632/check`)
+        fetch(`/api/check`)
             // 解析为 JSON
             .then(response => response.json())
             .then(data => {

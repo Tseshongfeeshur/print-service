@@ -47,7 +47,7 @@
         
         try {
             // 发送 POST 请求到 /upload 接口
-            const response = await fetch(`http://${serverIp}:632/upload`, {
+            const response = await fetch(`/api/upload`, {
                 method: 'POST',
                 body: formData
             });
@@ -97,7 +97,7 @@
         const taskName = document.getElementById('task-name');
         taskName.innerHTML = '';
         try {
-            const response = await fetch(`http://${serverIp}:632/subfolders`);
+            const response = await fetch(`/api/subfolders`);
             const data = await response.json();
             // 检查响应状态并提取子文件夹列表
             if (data.status === "success" && data.subfolders) {
@@ -130,7 +130,7 @@
         console.log('当前文件夹：', folder); // 此处应能正常获取到值
         
         const ul = document.getElementById('file-checkbox-container');
-        const response = await fetch(`http://${serverIp}:632/subfiles?subfolder=${folder}`);
+        const response = await fetch(`/api/subfiles?subfolder=${folder}`);
         const data = await response.json();
         if (data.status === "success") {
             ul.innerHTML = '';

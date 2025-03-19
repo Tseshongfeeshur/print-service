@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import cups
 import os
+import subprocess
+import tempfile
 from datetime import datetime
 import random
 
@@ -94,6 +96,100 @@ def get_subfiles():
         files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
         return jsonify({"status": "success", "subfolder": subfolder, "files": files, "count": len(files)})
 
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/print', methods=['POST'])
+def print_files():
+    try:
+        # 获取 JSON 数据
+        data = request.get_json()
+        if not data or 'files' not in data or 'printOptions' not in data:
+            return jsonify({"status": "error", "message": "缺少 files 或 printOptions 参数"}), 400
+
+        files = data['files']
+        print_options = data['printOptions']
+
+        if not files:
+            return jsonify({"status": "error", "message": "文件列表为空"}), 400
+
+        # 创建临时目录
+        temp_dir = tempfile.mkdtemp()
+        processed_files = []
+
+        # 处理每个文件
+        for file_path in files:
+            if not os.path.exists(file_path):
+                return jsonify({"status": "error", "message": f"文件不存在: {file_path}"}), 404
+
+            # 检查文件是否需要转换
+            if file_path.lower().endswith(('.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx')):
+                # 使用 libreoffice 转换为 PDF
+                temp_pdf = os.path.join(temp_dir, f"{os.path.basename(file_path)}.pdf")
+                cmd = [
+                    'libreoffice',
+                    '--headless',
+                    '--convert-to', 'pdf',
+                    '--outdir', temp_dir,
+                    file_path
+                ]
+                result = subprocess.run(cmd, capture_output=True, text=True)
+                
+                if result.returncode != 0:
+                    return jsonify({
+                        "status": "error",
+                        "message": f"文件转换失败: {file_path}, 错误: {result.stderr}"
+                    }), 500
+                
+                # 获取转换后的 PDF 文件名
+                converted_file = os.path.join(temp_dir, os.path.splitext(os.path.basename(file_path))[0] + '.pdf')
+                if os.path.exists(converted_file):
+                    processed_files.append(converted_file)
+                else:
+                    return jsonify({"status": "error", "message": f"转换后的文件未找到: {file_path}"}), 500
+            else:
+                # 不需要转换的文件直接使用原路径
+                processed_files.append(file_path)
+
+        # 连接打印机并打印
+        conn = cups.Connection()
+        printers =易conn.getPrinters()
+        
+        # 使用默认打印机，如果没有则使用第一个可用打印机
+        default_printer = next((name for name, info in printers.items() 
+                              if info.get("printer-is-default", False)), 
+                             next(iter(printers), None))
+        
+        if not default_printer:
+            return jsonify({"status": "error", "message": "没有可用的打印机"}), 500
+
+        # 准备打印选项
+        options = {
+            'PageSize': print_options.get('PageSize', 'A4'),
+            'MediaType': print_options.get('MediaType', 'Plain'),
+            'InputSlot': print_options.get('InputSlot', 'tray1'),
+            'EconoMode': 'off' if print_options.get('EconoMode', False) else 'on',
+            'ColorModel': print_options.get('ColorModel', 'Gray'),
+            'OutputMode': print_options.get('OutputMode', 'FastRes600')
+        }
+
+        # 打印所有文件
+        job_ids = []
+        for file_path in processed_files:
+            job_id = conn.printFile(default_printer, file_path, os.path.basename(file_path), options)
+            job_ids.append(job_id)
+
+        return jsonify({
+            "status": "success",
+            "message": "打印任务已提交",
+            "job_ids": job_ids,
+            "printer": default_printer,
+            "file_count": len(processed_files),
+            "temp_dir": temp_dir  # 返回临时目录路径，便于后续使用
+        })
+
+    except cups.IPPError as e:
+        return jsonify({"status": "error", "message": f"打印错误: {e}"}), 500
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 

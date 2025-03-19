@@ -116,14 +116,27 @@ def print_files():
         # 创建临时目录
         temp_dir = tempfile.mkdtemp()
         processed_files = []
+        discarded_files = []  # 用于记录被丢弃的文件
+
+        # 定义支持的文件类型
+        MS_OFFICE_EXTS = ('.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx')
+        IMAGE_EXTS = ('.jpg', '.jpeg', '.png', '.gif', '.bmp')
+        TEXT_EXT = ('.txt',)
+        VALID_EXTS = MS_OFFICE_EXTS + IMAGE_EXTS + TEXT_EXT + ('.pdf',)
 
         # 处理每个文件
         for file_path in files:
             if not os.path.exists(file_path):
                 return jsonify({"status": "error", "message": f"文件不存在: {file_path}"}), 404
 
-            # 检查文件是否需要转换
-            if file_path.lower().endswith(('.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx')):
+            # 检查文件扩展名
+            file_ext = os.path.splitext(file_path.lower())[1]
+            if file_ext not in VALID_EXTS:
+                discarded_files.append({"file": file_path, "reason": "不支持的文件格式"})
+                continue
+
+            # 处理 MS Office 文档
+            if file_ext in MS_OFFICE_EXTS:
                 # 使用 libreoffice 转换为 PDF
                 temp_pdf = os.path.join(temp_dir, f"{os.path.basename(file_path)}.pdf")
                 cmd = [
@@ -148,12 +161,20 @@ def print_files():
                 else:
                     return jsonify({"status": "error", "message": f"转换后的文件未找到: {file_path}"}), 500
             else:
-                # 不需要转换的文件直接使用原路径
+                # PDF、图片和 txt 文件直接使用原路径
                 processed_files.append(file_path)
+
+        # 如果没有有效的文件需要打印
+        if not processed_files and discarded_files:
+            return jsonify({
+                "status": "error",
+                "message": "没有可打印的有效文件",
+                "discarded_files": discarded_files
+            }), 400
 
         # 连接打印机并打印
         conn = cups.Connection()
-        printers =易conn.getPrinters()
+        printers = conn.getPrinters()
         
         # 使用默认打印机，如果没有则使用第一个可用打印机
         default_printer = next((name for name, info in printers.items() 
@@ -179,19 +200,25 @@ def print_files():
             job_id = conn.printFile(default_printer, file_path, os.path.basename(file_path), options)
             job_ids.append(job_id)
 
-        return jsonify({
+        # 返回结果，包括丢弃的文件信息（如果有）
+        response = {
             "status": "success",
             "message": "打印任务已提交",
             "job_ids": job_ids,
             "printer": default_printer,
             "file_count": len(processed_files),
-            "temp_dir": temp_dir  # 返回临时目录路径，便于后续使用
-        })
+            "temp_dir": temp_dir
+        }
+        if discarded_files:
+            response["discarded_files"] = discarded_files
+
+        return jsonify(response)
 
     except cups.IPPError as e:
         return jsonify({"status": "error", "message": f"打印错误: {e}"}), 500
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
 
 # 让 Flask 直接托管前端
 @app.route('/', defaults={'path': ''})

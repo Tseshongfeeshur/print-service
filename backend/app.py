@@ -155,7 +155,7 @@ if __name__ == '__main__':
     flask_process = subprocess.Popen(["python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=632"])
 
     # 启动前端 HTTP 服务器
-    frontend_process = subprocess.Popen(["python3", "-m", "http.server", "631", "--directory", "../frontend"])
+    frontend_process = subprocess.Popen(["python3", "-m", "http.server", "633", "--directory", "../frontend"])
 
     try:
         flask_process.wait()

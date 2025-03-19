@@ -1,6 +1,5 @@
 (function() {
     function checkPrinter() {
-        const serverIp = localStorage.getItem('serverIp');
         const connectedStatuIcon = document.getElementById('connected-statu');
         const errorStatuIcon = document.getElementById('error-statu');
         fetch(`/api/check`)

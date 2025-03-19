@@ -1,5 +1,4 @@
 (function() {
-    serverIp = localStorage.getItem('serverIp');
     const tab = document.getElementById('tab');
     tab.addEventListener('change', () => {
         const subTabs = document.querySelectorAll('s-tab-item');

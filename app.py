@@ -182,7 +182,7 @@ def print_files():
                              next(iter(printers), None))
         
         if not default_printer:
-            return jsonify({"status": "error", "message": "没有可用的打印机"}), 500
+            return jsonify({"status": "error", "message": "没有可用的打印机"}), 503
 
         # 准备打印选项
         options = {

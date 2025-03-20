@@ -204,7 +204,27 @@
 
             // 检查响应是否成功
             if (!response.ok) {
-                throw new Error(`HTTP 错误: ${response.status}`);
+                if (response.status === 400) {
+                    const errorSnackbar = sober.Snackbar.builder({
+                        text: `请先选择文件，指定打印选项。😢（${response.message}）`,
+                        type: 'error'
+                    });
+                } else if (response.status === 404) {
+                    const errorSnackbar = sober.Snackbar.builder({
+                        text: `文件找不到了。😢（${response.message}）`,
+                        type: 'error'
+                    });
+                } else if (response.status === 500) {
+                    const errorSnackbar = sober.Snackbar.builder({
+                        text: `文件转换失败。😢（${response.message}）`,
+                        type: 'error'
+                    });
+                } else if (response.status === 503) {
+                    const errorSnackbar = sober.Snackbar.builder({
+                        text: '似乎找不到打印机，请定位至主页检查打印机状态。😢',
+                        type: 'error'
+                    });
+                }
             }
 
             // 解析响应数据

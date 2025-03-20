@@ -204,19 +204,21 @@
 
             // 检查响应是否成功
             if (!response.ok) {
+                // 解析响应数据
+                const result = await response.json();
                 if (response.status === 400) {
                     const errorSnackbar = sober.Snackbar.builder({
-                        text: `请先选择文件，指定打印选项。😢（${response.message}）`,
+                        text: `请先选择文件，指定打印选项。😢（${result.message}）`,
                         type: 'error'
                     });
                 } else if (response.status === 404) {
                     const errorSnackbar = sober.Snackbar.builder({
-                        text: `文件找不到了。😢（${response.message}）`,
+                        text: `文件找不到了。😢（${result.message}）`,
                         type: 'error'
                     });
                 } else if (response.status === 500) {
                     const errorSnackbar = sober.Snackbar.builder({
-                        text: `文件转换失败。😢（${response.message}）`,
+                        text: `文件转换失败。😢（${result.message}）`,
                         type: 'error'
                     });
                 } else if (response.status === 503) {

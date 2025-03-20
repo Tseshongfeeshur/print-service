@@ -173,6 +173,8 @@
 
     // 提交打印请求的函数
     async function submitPrintRequest() {
+        const printFab = document.getElementById('print-now');
+        printFab.disabled = true;
         let printData = {
             files: [],
             printOptions: {
@@ -194,6 +196,10 @@
             }
         });
         try {
+            const successSnackbar = sober.Snackbar.builder({
+                text: '尝试提交打印任务…🧐'
+            });
+            successSnackbar.show()
             const response = await fetch('/api/print', {
                 method: 'POST',
                 headers: {
@@ -227,30 +233,39 @@
                         type: 'error'
                     });
                 }
+                errorSnackbar.show();
             }
 
             // 解析响应数据
             const result = await response.json();
-            console.log('打印请求结果:', result);
+            console.log(result);
 
             // 处理响应
             if (result.status === 'success') {
-                console.log(`成功提交 ${result.file_count} 个文件的打印任务`);
-                console.log('打印机:', result.printer);
-                console.log('任务 ID:', result.job_ids);
+                let message = `${result.file_count} 个文件打印成功。😋`
                 if (result.discarded_files) {
-                    console.log('被丢弃的文件:', result.discarded_files);
+                    message += `，${result.discarded_files} 暂不支持打印。😢`
                 }
+                const successSnackbar = sober.Snackbar.builder({
+                    text: message
+                });
+                successSnackbar.show()
             } else {
-                console.error('打印失败:', result.message);
-                if (result.discarded_files) {
-                    console.error('被丢弃的文件:', result.discarded_files);
-                }
+                const errorSnackbar = sober.Snackbar.builder({
+                    text: `打印失败。😢（${result.message}）`,
+                    type: 'error'
+                });
+                errorSnackbar.show()
             }
 
         } catch (error) {
-            console.error('提交打印请求时出错:', error);
+            const errorSnackbar = sober.Snackbar.builder({
+                text: `提交任务出错。😢（${error}）`,
+                type: 'error'
+            });
+            errorSnackbar.show()
         }
+        printFab.disabled = false;
     }
 
     const printFab = document.getElementById('print-now');

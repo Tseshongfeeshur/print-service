@@ -136,7 +136,9 @@
             if (data.files.length != 0) {
                 data.files.forEach((file) => {
                     const li = document.createElement('s-checkbox');
+                    li.class = 'file-names'
                     li.textContent = file;
+                    li.id = file;
                     li.checked = true;
                     ul.appendChild(li);
                 });
@@ -157,7 +159,6 @@
         getFiles(event);
     });
 
-    // 遍历配置项，生成 `<s-picker>` 结构
     const printOptionPickers = document.querySelectorAll('.print-option-pickers');
     printOptionPickers.forEach(picker => {
         const pickerValue = localStorage.getItem(picker.id);
@@ -168,4 +169,62 @@
             localStorage.setItem(event.target.id, event.target.value);
         });
     });
+    // 定义要提交的数据
+
+    // 提交打印请求的函数
+    async function submitPrintRequest() {
+        const printData = {
+            files: [],
+            printOptions: {
+                PageSize: document.getElementById('PageSize').value || "A4",
+                MediaType: document.getElementById('MediaType').value || "Plain",
+                InputSlot: document.getElementById('InputSlot').value || "tray1",
+                EconoMode: document.getElementById('EconoMode')?.value === "true" || false, // 转换为布尔值
+                ColorModel: document.getElementById('ColorModel').value || "Gray",
+                OutputMode: document.getElementById('OutputMode').value || "FastRes600"
+            }
+        };
+        const folder = document.getElementById('task-name').value;
+        let files = [];
+        const filesCheckboxes = document.querySelectorAll('')
+        try {
+            const response = await fetch('http://localhost:632/api/print', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(printData) // 将对象转换为 JSON 字符串
+            });
+    
+            // 检查响应是否成功
+            if (!response.ok) {
+                throw new Error(`HTTP 错误: ${response.status}`);
+            }
+    
+            // 解析响应数据
+            const result = await response.json();
+            console.log('打印请求结果:', result);
+    
+            // 处理响应
+            if (result.status === 'success') {
+                console.log(`成功提交 ${result.file_count} 个文件的打印任务`);
+                console.log('打印机:', result.printer);
+                console.log('任务 ID:', result.job_ids);
+                if (result.discarded_files) {
+                    console.log('被丢弃的文件:', result.discarded_files);
+                }
+            } else {
+                console.error('打印失败:', result.message);
+                if (result.discarded_files) {
+                    console.error('被丢弃的文件:', result.discarded_files);
+                }
+            }
+    
+        } catch (error) {
+            console.error('提交打印请求时出错:', error);
+        }
+    }
+
+    const printFab = document.getElementById('print-now');
+    printFab.addEventListener('click', submitPrintRequest);
 })();

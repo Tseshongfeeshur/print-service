@@ -212,23 +212,27 @@
             if (!response.ok) {
                 // 解析响应数据
                 const result = await response.json();
+                let errorSnackbar = sober.Snackbar.builder({
+                    text: `发生错误。😢`,
+                    type: 'error'
+                });
                 if (response.status === 400) {
-                    const errorSnackbar = sober.Snackbar.builder({
+                    errorSnackbar = sober.Snackbar.builder({
                         text: `请先选择文件，指定打印选项。😢（${result.message}）`,
                         type: 'error'
                     });
                 } else if (response.status === 404) {
-                    const errorSnackbar = sober.Snackbar.builder({
+                    errorSnackbar = sober.Snackbar.builder({
                         text: `文件找不到了。😢（${result.message}）`,
                         type: 'error'
                     });
                 } else if (response.status === 500) {
-                    const errorSnackbar = sober.Snackbar.builder({
+                    errorSnackbar = sober.Snackbar.builder({
                         text: `文件转换失败。😢（${result.message}）`,
                         type: 'error'
                     });
                 } else if (response.status === 503) {
-                    const errorSnackbar = sober.Snackbar.builder({
+                    errorSnackbar = sober.Snackbar.builder({
                         text: '似乎找不到打印机，请定位至主页检查打印机状态。😢',
                         type: 'error'
                     });

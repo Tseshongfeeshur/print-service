@@ -191,7 +191,8 @@ def print_files():
             'InputSlot': print_options.get('InputSlot', 'tray1'),
             'EconoMode': 'off' if print_options.get('EconoMode', False) else 'on',
             'ColorModel': print_options.get('ColorModel', 'Gray'),
-            'OutputMode': print_options.get('OutputMode', 'FastRes600')
+            'OutputMode': print_options.get('OutputMode', 'FastRes600'),
+            'fit-to-page': 'true'  # 添加此行以确保图片适应页面并居中
         }
 
         # 打印所有文件

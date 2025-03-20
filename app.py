@@ -54,7 +54,7 @@ def upload_files():
         uploaded_files = []
         for file in files:
             if file and file.filename:
-                filename = file.filename.lower
+                filename = file.filename
                 file_path = os.path.join(upload_folder, filename)
                 file.save(file_path)
                 uploaded_files.append({"filename": filename, "path": file_path})

@@ -1,7 +1,8 @@
 // 阻断后退行为
-window.onpopstate = function(event) {
-    return;
-};
+window.history.pushState(null, null, document.URL);
+window.addEventListener('popstate', function () {
+    window.history.pushState(null, null, document.URL);
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     // 设置抽屉展开按钮

@@ -1,5 +1,9 @@
 :not(:defined) {
-  visibility: hidden;
+    opacity: 0;
+}
+
+* {
+    transition: opacity ease .3s;
 }
 
 html, body {

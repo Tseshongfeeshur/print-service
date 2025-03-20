@@ -174,6 +174,7 @@
     // 提交打印请求的函数
     async function submitPrintRequest() {
         let printData = {
+            files: [],
             printOptions: {
                 PageSize: document.getElementById('PageSize')?.value || "A4",
                 MediaType: document.getElementById('MediaType')?.value || "Plain",

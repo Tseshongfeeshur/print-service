@@ -194,7 +194,7 @@
             }
         });
         try {
-            const response = await fetch('http://localhost:632/api/print', {
+            const response = await fetch('/api/print', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

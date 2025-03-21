@@ -1,7 +1,7 @@
 // 阻断后退行为
-window.history.pushState(null, null, document.URL);
-window.addEventListener('popstate', function () {
-    window.history.pushState(null, null, document.URL);
+window.addEventListener('beforeunload', function (event) {
+    event.preventDefault();
+    event.returnValue = ''; // 部分浏览器需要这个返回值
 });
 
 document.addEventListener('DOMContentLoaded', function() {

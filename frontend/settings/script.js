@@ -1,6 +1,6 @@
 (function() {
     // 获取所有可用打印机及默认打印机
-    const printersElement = document.getElementById('default-printer');
+    const printersElement = document.getElementById('default-printer')
     function getDefaultPrinter() {
         fetch('/api/default-printer')
             .then(response => response.json())
@@ -32,6 +32,7 @@
                 errorSnackbar.show();
             });
     }
+    
     // 设置默认打印机
     function setDefaultPrinter(event) {
         const printerName = event.target.value;
@@ -66,4 +67,4 @@
     getDefaultPrinter(); // 获取打印机信息
     printersElement.addEventListener('change', setDefaultPrinter);
     // setDefaultPrinter('你的打印机名称'); // 设置默认打印机（使用实际的打印机名称）
-});
+})();

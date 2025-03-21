@@ -1,6 +1,6 @@
 (function() {
     // 获取所有可用打印机及默认打印机
-    const printersElement = document.getElementById('default-printer')
+    const printersElement = document.getElementById('default-printer');
     function getDefaultPrinter() {
         fetch('/api/default-printer')
             .then(response => response.json())
@@ -32,7 +32,6 @@
                 errorSnackbar.show();
             });
     }
-    
     // 设置默认打印机
     function setDefaultPrinter(event) {
         const printerName = event.target.value;

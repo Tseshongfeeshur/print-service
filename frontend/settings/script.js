@@ -12,7 +12,7 @@
                         printerElement.value = printerName;
                         printerElement.textContent = printerName;
                         if (printerName == data.default_printer) {
-                            printerElement.selected = true;
+                            printerElement.selected = 'true';
                         }
                         printersElement.appendChild(printerElement);
                     });

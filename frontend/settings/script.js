@@ -11,6 +11,7 @@
                         const printerElement = document.createElement('s-picker-item');
                         printerElement.value = printerName;
                         printerElement.textContent = printerName;
+                        console.log(printerName, data.default_printer)
                         if (printerName == data.default_printer) {
                             printerElement.selected = 'true';
                         }

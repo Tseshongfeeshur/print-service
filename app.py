@@ -230,7 +230,7 @@ def default_printer():
             default_printer = next((name for name, info in printers.items() 
                                     if info.get("printer-is-default", False)), None)
             printer_list = list(printers.keys())
-
+            print(printers)
             return jsonify({
                 "status": "success",
                 "printers": printer_list,

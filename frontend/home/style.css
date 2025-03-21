@@ -31,7 +31,7 @@ div#head-text-container {
     display: flex;
     width: calc(100% - 2em * 2);
     padding: 0 2em;
-    margin-bottom: 4em;
+    margin-bottom: 3em;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
@@ -44,10 +44,19 @@ span#head-h1 {
     margin: 24px 0;
 }
 
+span.head-desc {
+    margin-top: .3em;
+}
+
 div#button-container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     flex-wrap: nowrap;
+}
+
+s-icon-button#button-action {
+    width: 4em;
+    height: 4em;
 }

@@ -219,6 +219,41 @@ def print_files():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+@app.route('/api/default-printer', methods=['GET', 'POST'])
+def default_printer():
+    try:
+        conn = cups.Connection()
+        printers = conn.getPrinters()
+        
+        if request.method == 'GET':
+            # 获取所有可用打印机及默认打印机
+            default_printer = next((name for name, info in printers.items() 
+                                    if info.get("printer-is-default", False)), None)
+            printer_list = list(printers.keys())
+
+            return jsonify({
+                "status": "success",
+                "printers": printer_list,
+                "default_printer": default_printer
+            })
+
+        elif request.method == 'POST':
+            # 设置默认打印机
+            data = request.get_json()
+            new_default = data.get('printer')
+
+            if new_default not in printers:
+                return jsonify({"status": "error", "message": "指定的打印机不存在"}), 400
+
+            subprocess.run(["lpoptions", "-d", new_default], check=True)
+            return jsonify({"status": "success", "message": f"默认打印机已设置为 {new_default}"})
+
+    except cups.IPPError as e:
+        return jsonify({"status": "error", "message": f"CUPS 连接错误: {e}"})
+    except subprocess.CalledProcessError as e:
+        return jsonify({"status": "error", "message": f"命令执行失败: {e}"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
 
 # 让 Flask 直接托管前端
 @app.route('/', defaults={'path': ''})

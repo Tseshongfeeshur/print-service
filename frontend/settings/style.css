@@ -1,0 +1,9 @@
+s-scroll-view#container {
+    margin: 0 2em 0 2em;
+    padding-top: 3em;
+}
+
+s-picker.setting-picker {
+    max-width: none;
+    width: 100%;
+}

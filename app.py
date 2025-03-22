@@ -219,7 +219,7 @@ def print_files():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-@app.route('/api/default-printer', methods=['GET', 'POST'])
+@app.route('/api/printer', methods=['GET', 'POST'])
 def default_printer():
     try:
         conn = cups.Connection()
@@ -227,14 +227,11 @@ def default_printer():
         
         if request.method == 'GET':
             # 获取所有可用打印机及默认打印机
-            default_printer = next((name for name, info in printers.items() 
-                                    if info.get("printer-is-default", False)), None)
             printer_list = list(printers.keys())
-            print(printers)
+
             return jsonify({
                 "status": "success",
-                "printers": printer_list,
-                "default_printer": default_printer
+                "printers": printer_list
             })
 
         elif request.method == 'POST':

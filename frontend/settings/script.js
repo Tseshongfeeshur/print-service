@@ -2,7 +2,7 @@
     // 获取所有可用打印机及默认打印机
     const printersElement = document.getElementById('default-printer')
     function getDefaultPrinter() {
-        fetch('/api/default-printer')
+        fetch('/api/printer')
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
@@ -11,15 +11,15 @@
                         const printerElement = document.createElement('s-picker-item');
                         printerElement.value = printerName;
                         printerElement.textContent = printerName;
-                        console.log(data)
-                        if (printerName == data.default_printer) {
+                        const localDefaultPrinter = localStorage.getItem('default-printer');
+                        if (printerName == localDefaultPrinter) {
                             printerElement.selected = 'true';
                         }
                         printersElement.appendChild(printerElement);
                     });
                 } else {
                     const errorSnackbar = sober.Snackbar.builder({
-                        text: `获取默认打印机失败。😢（${data.message}）`,
+                        text: `获取打印机列表失败。😢（${data.message}）`,
                         type: 'error'
                     });
                     errorSnackbar.show();
@@ -37,7 +37,7 @@
     // 设置默认打印机
     function setDefaultPrinter(event) {
         const printerName = event.target.value;
-        fetch('/api/default-printer', {
+        fetch('/api/printer', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ printer: printerName })
@@ -48,6 +48,7 @@
                 const successSnackbar = sober.Snackbar.builder({
                     text: '设置成功。😋'
                 });
+                localStorage.setItem('default-printer', printerName);
                 successSnackbar.show();
             } else {
                 const errorSnackbar = sober.Snackbar.builder({

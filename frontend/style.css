@@ -14,36 +14,39 @@ page#app {
     width: 100%;
 }
 
-div#drawer-content {
-    widsth: 100%;
-}
-
 s-menu#app-menu {
     max-width: 100%;
 }
 
+div#drawer-content {
+    border-radius: 0 2em 2em 0;
+    box-shadow: none;
+}
+
 div#big-label {
-    height: 8em;
+    height: 10em;
 }
 
 s-icon#big-label-icon {
     width: 5em;
     height: 5em;
+    margin-bottom: 1em;
     color: var(--s-color-outline-variant);
 }
 
 s-menu-item {
-    margin: 0 .5em;
+    margin: .4em .8em;
 }
 
 s-menu-item::part(container) {
-    height: 3.5em;
-    border-radius: 3.5em;
+    height: 4em;
+    border-radius: 4em;
 }
 
 s-menu-item::part(text) {
-    font-weight: 500;
+    font-weight: regular;
     margin-left: .6em;
+    font-size: 1rem;
 }
 
 div#app-title {

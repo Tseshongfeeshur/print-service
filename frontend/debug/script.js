@@ -6,6 +6,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.status === "success") {
+                console.log(data)
                 // 确保 jobs 是一个数组
                 if (Array.isArray(data.jobs)) {
                     if (data.jobs.length === 0) {

@@ -68,5 +68,4 @@
     }
     getDefaultPrinter(); // 获取打印机信息
     printersElement.addEventListener('change', setDefaultPrinter);
-    // setDefaultPrinter('你的打印机名称'); // 设置默认打印机（使用实际的打印机名称）
 })();

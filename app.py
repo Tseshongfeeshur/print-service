@@ -252,6 +252,82 @@ def default_printer():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
+@app.route('/api/test', methods=['POST'])
+def print_test_page():
+    try:
+        # 获取 CUPS 默认打印机
+        conn = cups.Connection()
+        printers = conn.getPrinters()
+        default_printer = next((name for name, info in printers.items() 
+                               if info.get("printer-is-default", False)), 
+                               next(iter(printers), None))
+
+        if not default_printer:
+            return jsonify({"status": "error", "message": "没有可用的打印机"}), 503
+        
+        # 打印 CUPS 测试页
+        test_page_path = "/usr/share/cups/data/testprint"
+        job_id = conn.printFile(default_printer, test_page_path, "Test Page", {})
+        return jsonify({"status": "success", "message": "测试页已提交", "job_id": job_id})
+    except cups.IPPError as e:
+        return jsonify({"status": "error", "message": f"打印错误: {e}"}), 500
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/check-queue', methods=['GET'])
+def check_queue():
+    try:
+        conn = cups.Connection()
+        job_list = conn.getJobs()
+        
+        if not job_list:
+            return jsonify({"status": "success", "message": "队列为空"})
+        
+        jobs = []
+        for job_id, job_info in job_list.items():
+            jobs.append({
+                "job_id": job_id,
+                "printer": job_info.get("printer", "Unknown"),
+                "user": job_info.get("user", "Unknown"),
+                "status": job_info.get("status", "Unknown"),
+                "pages": job_info.get("pages", "Unknown")
+            })
+        
+        return jsonify({"status": "success", "jobs": jobs})
+    except cups.IPPError as e:
+        return jsonify({"status": "error", "message": f"CUPS 错误: {e}"}), 500
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/clear-queue', methods=['POST'])
+def clear_queue():
+    try:
+        conn = cups.Connection()
+        job_list = conn.getJobs()
+        
+        if not job_list:
+            return jsonify({"status": "success", "message": "队列为空"})
+        
+        for job_id in job_list:
+            conn.cancelJob(job_id)
+        
+        return jsonify({"status": "success", "message": "所有打印任务已取消"})
+    except cups.IPPError as e:
+        return jsonify({"status": "error", "message": f"CUPS 错误: {e}"}), 500
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/restart', methods=['POST'])
+def restart_service():
+    try:
+        subprocess.run(['sudo', 'systemctl', 'restart', 'print-service'], check=True)
+        return jsonify({"status": "success", "message": "打印服务已重启"})
+    except subprocess.CalledProcessError as e:
+        return jsonify({"status": "error", "message": f"重启服务失败: {e}"}), 500
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
 # 让 Flask 直接托管前端
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

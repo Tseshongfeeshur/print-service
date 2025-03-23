@@ -196,10 +196,10 @@
             }
         });
         try {
-            const successSnackbar = sober.Snackbar.builder({
+            const tipSnackbar = sober.Snackbar.builder({
                 text: '尝试提交打印任务…🧐'
             });
-            successSnackbar.show()
+            tipSnackbar.show()
             const response = await fetch('/api/print', {
                 method: 'POST',
                 headers: {

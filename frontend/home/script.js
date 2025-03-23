@@ -10,7 +10,6 @@
                     const printerNames = data.details.map(printer => printer.name).join("、");
                     const successSnackbar = sober.Snackbar.builder({
                         text: `打印机 ${printerNames} 已就绪。😋`,
-                        duration: 1000
                     });
                     errorStatuIcon.style.display = 'none';
                     connectedStatuIcon.style.display = 'inline-block';

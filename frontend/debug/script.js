@@ -49,6 +49,10 @@
             errorSnackbar.show();
         });
     }
+
+    function clearQueue() {
+        console.log('test')
+    }
     const checkQueueButton = document.getElementById('check-queue-button');
     checkQueueButton.addEventListener('click', checkQueue);
 })()

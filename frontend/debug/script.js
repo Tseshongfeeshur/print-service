@@ -9,37 +9,29 @@
                 console.log(data)
                 // 确保 jobs 是一个数组
                 if (Array.isArray(data.jobs)) {
-                    if (data.jobs.length === 0) {
-                        const tipSnackbar = sober.Snackbar.builder({
-                            text: '打印队列为空。🧐'
-                        });
-                        tipSnackbar.show();
-                    } else {
-                        let jobInfo = data.jobs.map(job => `${job.job_id} - ${job.status}`).join("\n");
-                        const infoDialog = sober.Dialog.builder({
-                            headline: '打印队列',
-                            text: jobInfo,
-                            actions: [
-                                {
-                                    text: '清空队列',
-                                    click: clearQueue
-                                },
-                                {
-                                    text: '好',
-                                    click: () => {
-                                        infoDialog.showed = false;
-                                    }
-                                }
-                            ]
-                        });
-                        infoDialog.show();
-                    }
-                } else {
-                    const errorSnackbar = sober.Snackbar.builder({
-                        text: '错误: 打印队列数据格式不正确',
-                        type: 'error'
+                    const tipSnackbar = sober.Snackbar.builder({
+                        text: '打印队列为空。🧐'
                     });
-                    errorSnackbar.show();
+                    tipSnackbar.show();
+                } else {
+                    let jobInfo = data.jobs.map(job => `${job.job_id} - ${job.status}`).join("\n");
+                    const infoDialog = sober.Dialog.builder({
+                        headline: '打印队列',
+                        text: jobInfo,
+                        actions: [
+                            {
+                                text: '清空队列',
+                                click: clearQueue
+                            },
+                            {
+                                text: '好',
+                                click: () => {
+                                    infoDialog.showed = false;
+                                }
+                            }
+                        ]
+                    });
+                    infoDialog.show();
                 }
             } else {
                 const errorSnackbar = sober.Snackbar.builder({

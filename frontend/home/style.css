@@ -41,7 +41,7 @@ div#head-text-container {
 span#head-h1 {
     font-size: 3em;
     font-weight: bold;
-    margin: 24px 0;
+    margin: .5em 0;
 }
 
 span.head-desc {
@@ -54,6 +54,7 @@ div#button-container {
     align-items: center;
     flex-direction: column;
     flex-wrap: nowrap;
+    margin-top: 5em;
 }
 
 s-icon-button#button-action {

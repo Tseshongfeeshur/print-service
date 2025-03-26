@@ -252,6 +252,8 @@ def default_printer():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
+# 此后端点仍需测试
+
 @app.route('/api/test', methods=['POST'])
 def print_test_page():
     try:
@@ -274,56 +276,30 @@ def print_test_page():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-# @app.route('/api/check-queue', methods=['GET'])
-# def check_queue():
-#     try:
-#         conn = cups.Connection()
-#         job_list = conn.getJobs()
-        
-#         if not job_list:
-#             return jsonify({"status": "success", "message": "队列为空"})
-        
-#         jobs = []
-#         for job_id, job_info in job_list.items():
-#             jobs.append({
-#                 "job_id": job_id,
-#                 "printer": job_info.get("printer", "Unknown"),
-#                 "user": job_info.get("user", "Unknown"),
-#                 "status": job_info.get("status", "Unknown"),
-#                 "pages": job_info.get("pages", "Unknown")
-#             })
-        
-#         return jsonify({"status": "success", "jobs": jobs})
-#     except cups.IPPError as e:
-#         return jsonify({"status": "error", "message": f"CUPS 错误: {e}"}), 500
-#     except Exception as e:
-#         return jsonify({"status": "error", "message": str(e)}), 500
-
 @app.route('/api/check-queue', methods=['GET'])
-def check_print_queue():
+def check_queue():
     try:
         conn = cups.Connection()
-        jobs = conn.getJobs(which_jobs='not-completed', my_jobs=False)
+        job_list = conn.getJobs()
         
-        queue_info = [{
-            "job_id": job_id,
-            "title": info.get("job-name", "Unknown"),
-            "printer": info.get("job-printer-name", "Unknown"),
-            "state": info.get("job-state", "Unknown"),
-            "submitted": datetime.fromtimestamp(info.get("time-at-creation", 0)).strftime("%Y-%m-%d %H:%M:%S")
-        } for job_id, info in jobs.items()]
+        if not job_list:
+            return jsonify({"status": "success", "message": "队列为空"})
         
-        return jsonify({
-            "status": "success",
-            "queue": queue_info,
-            "count": len(queue_info)
-        })
-    
+        jobs = []
+        for job_id, job_info in job_list.items():
+            jobs.append({
+                "job_id": job_id,
+                "printer": job_info.get("printer", "Unknown"),
+                "user": job_info.get("user", "Unknown"),
+                "status": job_info.get("status", "Unknown"),
+                "pages": job_info.get("pages", "Unknown")
+            })
+        
+        return jsonify({"status": "success", "jobs": jobs})
     except cups.IPPError as e:
         return jsonify({"status": "error", "message": f"CUPS 错误: {e}"}), 500
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-
 
 @app.route('/api/clear-queue', methods=['POST'])
 def clear_queue():

@@ -39,8 +39,7 @@
         const resultFiles = document.getElementById('result-files');
         const resultNumber = document.getElementById('result-number');
         const uploadSnackbar = sober.Snackbar.builder({
-            text: '正在上传…🧐',
-            duration: 1000
+            text: '正在上传…🧐'
         });
         uploadSnackbar.show();
         

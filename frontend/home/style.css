@@ -13,13 +13,13 @@ div#head-icon-container {
 }
 
 s-icon-button#head-icon-button {
-    width: 50vw;
-    height: 50vw;
+    width: 14em;
+    height: 14em;
 }
 
 s-icon.head-icon {
-    width: 36vw;
-    height: 36vw;
+    width: 10em;
+    height: 10em;
     color: var(--s-color-primary);
 }
 
